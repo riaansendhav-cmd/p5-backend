@@ -19,3 +19,35 @@ export const addToCart = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateCartItem = async (req, res, next) => {
+  try {
+    const updatedItem = await Cart.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    res.json(updatedItem);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteCartItem = async (req, res, next) => {
+  try {
+    const deletedItem = await Cart.findByIdAndDelete(req.params.id);
+
+    if (!deletedItem) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    res.json({ message: "Item removed from cart" });
+  } catch (err) {
+    next(err);
+  }
+};
